@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-    <link href="./output.css" rel="stylesheet">
     <title>National Parks</title>
 </head>
 <body>
@@ -12,46 +11,90 @@
         <h1>National Parks</h1>
     </header>
     <main>
-        <form class="max-w-sm mx-auto">
-            <label for="locations" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a State</label>
-            <select id="locations" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="all" default>All Locations</option>
-            </select>
-          </form>
+        <form class="nationalParksForm flex justify-end space-x-4 w-full">
+            <div>
+                <label for="locations" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a State</label>
+                <select id="locations" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="all" default>All Locations</option>
+                </select>
+            </div>
+            <div>
+                <label for="parkType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a Park Type</label>
+                <select id="parkType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="all" default>All Types</option>
+                </select>
+            </div>
+        </form>
 
           <div id="parksContainer"></div>
-
     </main>
 
     <script type="module">
         import {locationsArray} from './scripts/locationData.js';
+        import {parkTypesArray} from './scripts/parkTypeData.js'
         import {nationalParksArray} from './scripts/nationalParkData.js';
-
+    
         window.onload = function() {
             let locationsSelect = document.getElementById("locations");
-            for (let i = 0; i < locationsArray.length; i++) {
-                    let option = document.createElement("option");
-                    option.value = locationsArray[i];
-                    option.text = locationsArray[i];
-                    locationsSelect.appendChild(option);
-                };
+            let parkTypesSelect = document.getElementById("parkType");
+            
+            displayNationalParks(nationalParksArray);
 
+            for (let i = 0; i < locationsArray.length; i++) {
+                let option = document.createElement("option");
+                option.value = locationsArray[i];
+                option.text = locationsArray[i];
+                locationsSelect.appendChild(option);
+            };
+    
             locationsSelect.addEventListener('change', function() {
+                parkTypesSelect.value = 'all';
                 searchNationalParksByLocation(this.value);
             });
+    
+            for (let i = 0; i < parkTypesArray.length; i++) {
+                let option = document.createElement("option");
+                option.value = parkTypesArray[i];
+                option.text = parkTypesArray[i];
+                parkTypesSelect.appendChild(option);
+            };
+    
+            parkTypesSelect.addEventListener('change', function() {
+                locationsSelect.value = 'all';
+                searchNationalParksByType(this.value);
+            });
         }
+    
 
         function searchNationalParksByLocation(location) {
-           let parksInLocation = nationalParksArray.filter(park => park.State === location);
-           parksContainer.innerHTML = '';
-              console.log(parksInLocation);
-            
+            if (location === 'all') {
+                parksContainer.innerHTML = '';
+                displayNationalParks(nationalParksArray);
+            } else {
+                let parksInLocation = nationalParksArray.filter(park => park.State === location);
+                parksContainer.innerHTML = '';
+                displayNationalParks(parksInLocation);
+            }
+        }
+
+        function searchNationalParksByType(type) {
+            if (type === 'all') {
+                parksContainer.innerHTML = '';
+                displayNationalParks(nationalParksArray);
+            } else {
+                let parksWithType = nationalParksArray.filter(park => park.LocationName.toLowerCase().includes(type.toLowerCase()));
+                parksContainer.innerHTML = '';
+                displayNationalParks(parksWithType);
+            }
+        }
+
+
+        function displayNationalParks(parksInLocation) {
+            let parksContainer = document.getElementById("parksContainer");
            for (let park of parksInLocation) {
             let parkCard = `
-                <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="#">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${park.LocationName}</h5>
-                    </a>
+                <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${park.LocationName}</h5>
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">${park.Address}, ${park.City}, ${park.State}, ${park.ZipCode}</p>
                     <p class="mt-2 text-gray-500">${park.Phone ? park.Phone : ''}</p>
                     ${park.Visit ? `<a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
