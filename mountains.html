@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="mountains.css">
     <title>Mountains Information</title>
 </head>
 <body>
@@ -11,7 +12,7 @@
         <h1>Mountains Information</h1>
     </header>
     <main>
-    <div class="mountainContainer"></div>
+    <div class="mountainContainer flex"></div>
     </main>
     <script type="module">
         import {mountainsArray} from './scripts/mountainData.js';
@@ -24,7 +25,7 @@
         for (let mountain of mountainsArray) {
             getSunsetForMountain(mountain.lat, mountain.lng).then(data => {
                 let mountainCard = `
-                    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4">
                         <img class="rounded-t-lg w-full" src="/images/${mountain.img}" alt="" />
                         <div class="p-5">
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${mountain.name}</h5>
