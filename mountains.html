@@ -20,23 +20,36 @@
         };
 
         function displayMountains(mountainsArray) {
-          let mountainContainer = document.querySelector('.mountainContainer');
-          for (let mountain of mountainsArray) {
-            let mountainCard = `
-                <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        let mountainContainer = document.querySelector('.mountainContainer');
+        for (let mountain of mountainsArray) {
+            getSunsetForMountain(mountain.lat, mountain.lng).then(data => {
+                let mountainCard = `
+                    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <img class="rounded-t-lg w-full" src="/images/${mountain.img}" alt="" />
-                    <div class="p-5">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${mountain.name}</h5>
-                        <div class="flex justify-between">
-                            <p class="font-normal text-gray-900 dark:text-gray-400">Elevation: ${mountain.elevation}</p>
-                            <p class="font-normal text-gray-900 dark:text-gray-400">Effort: ${mountain.effort}</p>
+                        <div class="p-5">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${mountain.name}</h5>
+                            <div class="flex justify-between">
+                                <p class="font-normal text-gray-900 dark:text-gray-400">Elevation: ${mountain.elevation}</p>
+                                <p class="font-normal text-gray-900 dark:text-gray-400">Effort: ${mountain.effort}</p>
+                            </div>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">${mountain.desc}</p>
+                            <div class="flex justify-between">
+                              <p class="font-normal text-gray-700 dark:text-gray-400">Sunrise: ${data.results.sunrise} UTC</p>
+                                <p class="font-normal text-gray-700 dark:text-gray-400">Sunset: ${data.results.sunset} UTC</p>
+                            </div>
                         </div>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">${mountain.desc}</p>
                     </div>
-                </div>
-              `;
-              mountainContainer.innerHTML += mountainCard;
-          }
+                `;
+                mountainContainer.innerHTML += mountainCard;
+            });
+        }
+}
+
+        async function getSunsetForMountain(lat, lng){
+          let response = await fetch(
+            `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&date=today`);
+          let data = await response.json();
+          return data;
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
