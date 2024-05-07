@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="nationalParks.css">
     <title>National Parks</title>
 </head>
 <body>
@@ -39,7 +38,7 @@
     </header>
     <main>
         <div class="flex justify-between m-4"> 
-            <h1 class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">National Parks</h1>
+            <h1 class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">National Parks Information</h1>
 
             <form class="nationalParksForm flex justify-end space-x-4 w-full mr-4">
                 <div>
@@ -57,7 +56,7 @@
             </div>
         </form>
 
-        <div id="parksContainer"></div>
+        <div class="flex flex-wrap justify-center" id="parksContainer"></div>
     </main>
 
     <script type="module">
@@ -95,7 +94,6 @@
                 searchNationalParksByType(this.value);
             });
         }
-    
 
         function searchNationalParksByLocation(location) {
             if (location === 'all') {
@@ -118,7 +116,6 @@
                 displayNationalParks(parksWithType);
             }
         }
-
 
         function displayNationalParks(parksInLocation) {
             let parksContainer = document.getElementById("parksContainer");
